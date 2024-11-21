@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ゲーム</title>
+  <style>
+    body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  width: 90%;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  text-align: center;
+}
+
+.player, .enemy, .message {
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+  backdrop-filter: blur(10px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+h1, h2, h3 {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 300;
+  text-shadow: 0 2px 5px rgba(0, 255, 255, 0.3);
+}
+
+.actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+button {
+  margin: 10px;
+  padding: 15px 30px;
+  font-size: 16px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.3), rgba(0, 200, 255, 0.7));
+  color: white;
+  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+}
+
+button:hover {
+  background: linear-gradient(135deg, rgba(0, 200, 255, 0.7), rgba(0, 255, 255, 1));
+  transform: scale(1.1);
+}
+
+button:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.reset-button {
+  background: linear-gradient(135deg, rgba(255, 100, 100, 0.3), rgba(255, 50, 50, 0.7));
+}
+
+.reset-button:hover {
+  background: linear-gradient(135deg, rgba(255, 50, 50, 0.7), rgba(255, 100, 100, 1));
+}
+
+input[type="text"] {
+  width: 80%;
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 16px;
+  box-shadow: 0 3px 10px rgba(0, 255, 255, 0.3);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border: 1px solid rgba(0, 255, 255, 0.7);
+  box-shadow: 0 5px 20px rgba(0, 255, 255, 0.5);
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="message">
+    <p><%= @message %></p><br>
+  </div>
+
+  <div class="player">
+    <h2>あなたの状態</h2>
+    <p>名前: <%= @player.name %></p>
+    <p>HP: <%= @player.hp %></p>
+    <p>MP: <%= @player.mp %></p>
+    <p>状態: <%= @player.status %></p>
+  </div>
+
+  <div class="enemy">
+    <h2>敵の状態</h2>
+    <p>名前: <%= @enemy.name %></p>
+    <p>HP: <%= @enemy.hp %></p>
+    <p>MP: <%= @enemy.mp %></p>
+    <p>状態: <%= @enemy.status %></p>
+  </div>
+
+  <div class="actions">
+    <%= form_with url: game_action_path, method: :post do %>
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <p>アクションを選んでください:</p>
+      <% Player::ACTIONS.each do |action_name, action_info| %>
+        <% next if action_name == "insufficient_mp" %>
+        <button type="submit" name="command" value="<%= action_name %>" <%= 'disabled' if @player.mp < action_info["cost"] %>>
+          <%= action_name.capitalize %>
+        </button>
+      <% end %>
+    <% end %> <!-- End of the form_with block for game action -->
+  </div>
+
+    <!-- 修正必要 -->
+  <div class="reset">
+    <%= form_with url: reset_game_path, method: :post do %>
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <button type="submit" class="reset-button">ゲームをリセット</button>
+    <% end %> <!-- End of the form_with block for reset -->
+  </div>
+
+</body>
+</html>
