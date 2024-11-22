@@ -29,14 +29,7 @@ class GameController < ApplicationController
   end
 
   def action
-    @acts = ["punch", "kick", "fire", "blackhole"]
-    @actions = {
-      "punch" => { "attribute" => "normal", "damage" => 10, "cost" => 0 },
-      "kick" => { "attribute" => "normal", "damage" => 20, "cost" => 5 },
-      "fire" => { "attribute" => "fire", "damage" => 20, "cost" => 10 },
-      "blackhole" => { "attribute" => "dark", "damage" => 0, "cost" => 20 },
-      "insufficient_mp" => { "attribute" => "none", "damage" => 0, "cost" => 0 }
-    }
+
 
     # セッションからプレイヤーと敵の状態を復元
     @player = Player.new(
