@@ -100,29 +100,67 @@ input[type="text"]:focus {
   box-shadow: 0 5px 20px rgba(0, 255, 255, 0.5);
 }
 
+.progress-bar {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 20px;
+  margin: 10px 0;
+  box-shadow: 0 2px 5px rgba(0, 255, 255, 0.3);
+}
+
+.progress {
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+.hp-bar {
+  background: linear-gradient(90deg, rgba(50, 255, 50, 0.8), rgba(100, 255, 100, 1));
+}
+
+.mp-bar {
+  background: linear-gradient(90deg, rgba(50, 50, 255, 0.8), rgba(100, 100, 255, 1));
+}
+
+
 
   </style>
 </head>
 <body>
   <div class="message">
-    <p><%= @message %></p><br>
+    <p><%= simple_format(@message) %></p><br>
   </div>
 
   <div class="player">
-    <h2>あなたの状態</h2>
-    <p>名前: <%= @player.name %></p>
-    <p>HP: <%= @player.hp %></p>
-    <p>MP: <%= @player.mp %></p>
-    <p>状態: <%= @player.status %></p>
+  <h2>あなたの状態</h2>
+  <p>名前: <%= @player.name %></p>
+  <p>HP: <%= @player.hp %> / <%= @player.max_hp %></p>
+  <div class="progress-bar">
+    <div class="progress hp-bar" style="width: <%= (@player.hp.to_f / @player.max_hp) * 100 %>%"></div>
   </div>
+  <p>MP: <%= @player.mp %> / <%= @player.max_mp %></p>
+  <div class="progress-bar">
+    <div class="progress mp-bar" style="width: <%= (@player.mp.to_f / @player.max_mp) * 100 %>%"></div>
+  </div>
+  <p>状態: <%= @player.status %></p>
+</div>
 
-  <div class="enemy">
-    <h2>敵の状態</h2>
-    <p>名前: <%= @enemy.name %></p>
-    <p>HP: <%= @enemy.hp %></p>
-    <p>MP: <%= @enemy.mp %></p>
-    <p>状態: <%= @enemy.status %></p>
+<div class="enemy">
+  <h2>敵の状態</h2>
+  <p>名前: <%= @enemy.name %></p>
+  <p>HP: <%= @enemy.hp %> / <%= @enemy.max_hp %></p>
+  <div class="progress-bar">
+    <div class="progress hp-bar" style="width: <%= (@enemy.hp.to_f / @enemy.max_hp) * 100 %>%"></div>
   </div>
+  <p>MP: <%= @enemy.mp %> / <%= @enemy.max_mp %></p>
+  <div class="progress-bar">
+    <div class="progress mp-bar" style="width: <%= (@enemy.mp.to_f / @enemy.max_mp) * 100 %>%"></div>
+  </div>
+  <p>状態: <%= @enemy.status %></p>
+</div>
+
 
   <div class="actions">
     <%= form_with url: game_action_path, method: :post do %>
